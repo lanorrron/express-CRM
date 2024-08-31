@@ -8,6 +8,7 @@ export type NonUpdatableFields<T> = Omit<T, 'id' | 'created_at' | 'updated_at' |
 export interface IBaseRepository<T extends BaseEntity, U extends BaseEntityToPersist<T>> {
 
     create(fields: U): Promise<T>;
+    findOne(field:U): Promise<T | null>
 
 /*    updateById(id: string, fields: Partial<NonUpdatableFields<T>>): Promise<T> | null;
 

@@ -18,4 +18,7 @@ export class BaseService<T extends BaseEntity, U extends BaseEntityToPersist<T>>
         };
         return this.repository.create(fieldsToCreate as unknown as U)
     }
+    findOne(field: U): Promise<T | null> {
+        return this.repository.findOne(field)
+    }
 }

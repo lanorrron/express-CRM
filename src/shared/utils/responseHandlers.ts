@@ -1,6 +1,6 @@
 import {Response} from 'express';
 
-export const sendSuccess = (response: Response, message: string, data: any) => {
+export const sendSuccess = <T>(response: Response, message: string, data: any) => {
     response.send({
         error: false,
         statusCode: 200,

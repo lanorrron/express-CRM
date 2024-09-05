@@ -1,12 +1,14 @@
 import {AccountService} from "../infrastructure/services/account.service";
 import {Request, Response} from 'express';
 import {AccountEntity} from "../domain/entities/account.entity";
+import {IHttpRequest} from "../../../shared/interfaces/httpRequest.interface";
+import {IHttpResponse} from "../../../shared/interfaces/httpResponse.interface";
 
 export class AccountController {
     constructor(private accountService: AccountService) {
     }
 
-    async registerAccount(req: Request, res: Response): Promise<void> {
+    async registerAccount(req: IHttpRequest<any>, res: IHttpResponse<any>): Promise<void> {
         try {
             const accountBody: AccountEntity = req.body;
             const account = await this.accountService.create(accountBody)

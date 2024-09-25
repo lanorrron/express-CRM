@@ -10,6 +10,7 @@ export class AccountEntity extends BaseEntity {
         this.email = email;
         this.password = password;
     }
+
     static fromDataBase(fields: AccountEntityFields): AccountEntity {
         return new AccountEntity(
             fields.id,

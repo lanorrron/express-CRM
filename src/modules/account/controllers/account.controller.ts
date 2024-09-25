@@ -1,23 +1,24 @@
 import {AccountService} from "../infrastructure/services/account.service";
-import {Request, Response} from 'express';
 import {AccountEntity} from "../domain/entities/account.entity";
-import {IHttpRequest} from "../../../shared/interfaces/httpRequest.interface";
-import {IHttpResponse} from "../../../shared/interfaces/httpResponse.interface";
+import {sendError, sendSuccess} from "../../../shared/utils/responseHandlers";
+import {GError} from "../../../shared/domain/entities/gError.entity";
+import {Response, Request} from "express";
 
 export class AccountController {
     constructor(private accountService: AccountService) {
     }
 
-    async registerAccount(req: IHttpRequest<any>, res: IHttpResponse<any>): Promise<void> {
+    async registerAccount(req: Request, res: Response): Promise<void> {
         try {
             const accountBody: AccountEntity = req.body;
-            const account = await this.accountService.create(accountBody)
-            res.status(201).json(account)
+            const account = await this.accountService.createAccount(accountBody)
+            res.json(sendSuccess('account created', account))
         } catch (error: any) {
-            if (error.message === 'An account with this email already exists') {
-                res.status(400).json({ message: error.message });
+            console.log(error)
+            if (error instanceof GError && error.statusCode === 409) {
+                res.json(sendError(error.message, error.statusCode))
             } else {
-                res.status(500).json({ message: 'Internal Server Error' });
+                res.json(sendError('Internal Server Error', 500))
             }
         }
     }

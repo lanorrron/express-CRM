@@ -1,6 +1,7 @@
-export interface IHttpResponse<T extends any>{
+export interface IHttpResponse{
     success: boolean;
     status_code: number;
-    data?: T;
+    message:string;
+    data?: any;
     error?: boolean;
 }

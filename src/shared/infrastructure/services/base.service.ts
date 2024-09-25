@@ -3,7 +3,7 @@ import {IBaseService} from "../../domain/interfaces/services/base.service.interf
 import {IBaseRepository} from "../../domain/interfaces/repositories/base.repository.interface";
 
 export class BaseService<T extends BaseEntity, U extends BaseEntityToPersist<T>> implements IBaseService<T, U> {
-    private readonly repository: IBaseRepository<T, U>;
+    protected readonly repository: IBaseRepository<T, U>;
 
     constructor(repository: IBaseRepository<T, U>) {
         this.repository = repository

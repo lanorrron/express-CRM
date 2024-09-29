@@ -3,7 +3,6 @@ import {AccountService} from "../infrastructure/services/account.service";
 import {AccountRepository} from "../infrastructure/respositories/account.repository";
 import {AccountController} from "../controllers/account.controller";
 
-
 const accountRepository = new AccountRepository();
 const accountService = new AccountService(accountRepository);
 const accountController = new AccountController(accountService)

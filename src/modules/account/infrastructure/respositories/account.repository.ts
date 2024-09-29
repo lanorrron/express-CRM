@@ -21,7 +21,6 @@ export class AccountRepository extends BaseRepository<AccountEntity, AccountEnti
         // Hash te password
         if (fields.password) {
             fields.password = await hash(fields.password, 10);
-            console.log('Hashed password:', fields.password);
         }
 
         // create account
@@ -31,4 +30,5 @@ export class AccountRepository extends BaseRepository<AccountEntity, AccountEnti
 
         return accountWithoutPassword
     }
+
 }

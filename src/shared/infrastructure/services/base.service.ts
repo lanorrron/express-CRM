@@ -21,4 +21,7 @@ export class BaseService<T extends BaseEntity, U extends BaseEntityToPersist<T>>
     findOne(field: U): Promise<T | null> {
         return this.repository.findOne(field)
     }
+    getById(id: string): Promise<T | null> {
+        return this.repository.getById(id)
+    }
 }

@@ -6,6 +6,7 @@ export interface IBaseService<T extends BaseEntity, U extends BaseEntityToPersis
 
     create(fields: U): Promise<T>;
     findOne(field:U): Promise<T | null>
+    getById(id: string): Promise<T | null>;
     /*
     updateById(id: string, fields: Partial<NonUpdatableFields<T>>): Promise<T | null>;
 

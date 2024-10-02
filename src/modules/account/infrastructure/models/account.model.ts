@@ -2,14 +2,16 @@
 import { Model, DataTypes } from 'sequelize';
 import { AccountEntity } from '../../domain/entities/account.entity';
 import { mainSequelize } from '../../../../config/DB/mysql';
+import {UserModel} from "../../../users/infrastructure/models/user.model";
 
 export class AccountModel extends Model<AccountEntity> implements AccountEntity {
     public id!: string;
     public created_at!: Date;
     public updated_at!: Date;
     public deleted_at!: Date | null;
-    public email!: string;
-    public password!: string;
+    public name_organization!: string;
+    public phone_number!: string;
+    public user_id!: string;
 }
 
 let isInitialized = false;
@@ -34,23 +36,40 @@ export const getAccountModel = () => {
                 type: DataTypes.DATE,
                 allowNull: true,
             },
-            email: {
+            name_organization: {
+                type: DataTypes.STRING,
+                allowNull: false,
+                unique: true
+            },
+            phone_number: {
                 type: DataTypes.STRING,
                 allowNull: false,
                 unique: true,
             },
-            password: {
+            user_id: {
                 type: DataTypes.STRING,
                 allowNull: false,
+                references: {
+                    model: UserModel,
+                    key: 'id'
+                },
+                onDelete: 'CASCADE',
+                onUpdate: 'CASCADE'
             }
         }, {
             sequelize: mainSequelize,
-            modelName: 'Account',
+            modelName: 'account',
             tableName: 'accounts',
             timestamps: true,
             paranoid: true,
         });
+
         isInitialized = true;
+
+        AccountModel.belongsTo(UserModel, {
+            foreignKey: 'user_id',
+            as: 'User',
+        });
     }
     return AccountModel;
 };

@@ -1,14 +1,17 @@
 import {BaseEntity, BaseEntityFields, BaseEntityToPersist} from "../../../../shared/domain/entities/base.entity";
 
 export class AccountEntity extends BaseEntity {
-    email: string;
-    password: string;
+    name_organization: string
+    phone_number: string;
+    user_id: string
 
 
-    constructor(id: string, created_at: Date | string, updated_at: Date | string, deleted_at: Date | string | null, email: string, password: string) {
+    constructor(id: string, created_at: Date | string, updated_at: Date | string, deleted_at: Date | string | null, name_organization: string, phone_number: string, user_id: string) {
         super(id, created_at, updated_at, deleted_at);
-        this.email = email;
-        this.password = password;
+        this.name_organization = name_organization;
+        this.phone_number = phone_number;
+        this.user_id = user_id
+
     }
 
     static fromDataBase(fields: AccountEntityFields): AccountEntity {
@@ -17,8 +20,9 @@ export class AccountEntity extends BaseEntity {
             fields.created_at,
             fields.updated_at,
             fields.deleted_at,
-            fields.email,
-            fields.password
+            fields.name_organization,
+            fields.phone_number,
+            fields.user_id
         );
     }
 }

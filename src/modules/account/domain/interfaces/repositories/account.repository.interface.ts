@@ -3,5 +3,4 @@ import {AccountEntity, AccountEntityToPersist} from "../../entities/account.enti
 
 export interface IAccountRepository extends IBaseRepository<AccountEntity, AccountEntityToPersist>{
     
-    createAccount(fields: AccountEntityToPersist):Promise<Omit<AccountEntity, 'password'>>
 }

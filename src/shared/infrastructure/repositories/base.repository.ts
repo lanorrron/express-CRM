@@ -19,10 +19,9 @@ export class BaseRepository<T extends BaseEntity, U extends BaseEntityToPersist<
         return this.parser(newItem.get({plain: true}));
     }
 
-    async findOne(query: Partial<U>): Promise<T | null> {
-        const result = await this.model.findOne({where: query as WhereOptions});
-        return result ? this.parser(result.toJSON()) : null;
-
+    async findOne(query: { where: Partial<U> }): Promise<T | null> {
+        const result = await this.model.findOne(query);
+        return result ? result.toJSON() as T : null;
     }
 
     async getById(id: string): Promise<T | null> {

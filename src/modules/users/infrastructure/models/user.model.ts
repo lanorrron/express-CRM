@@ -1,18 +1,16 @@
 import {DataTypes, Model, UUID, UUIDV4} from "sequelize";
-import {UserEntity} from "../../domain/entities/user.entity";
+import {UserEntity, UserEntityToPersist} from "../../domain/entities/user.entity";
 import {mainSequelize} from "../../../../config/DB/mysql";
 import {AccountModel} from "../../../account/infrastructure/models/account.model";
 
-export class UserModel extends Model<UserEntity> implements UserEntity {
-    created_at!: Date | string;
-    deleted_at!: Date | string | null;
+export class UserModel extends Model<UserEntityToPersist> implements UserEntityToPersist {
     email!: string;
     first_name!: string;
     id!: string;
     last_name!: string;
     password!: string;
     role!: string;
-    updated_at!: Date | string;
+
 
 }
 
@@ -47,32 +45,21 @@ export const getUserModel = () => {
                 type: DataTypes.STRING,
                 allowNull: false,
             },
-            created_at: {
-                type: DataTypes.DATE,
-                allowNull: false,
-                defaultValue: DataTypes.NOW,
-            },
-            updated_at: {
-                type: DataTypes.DATE,
-                allowNull: false,
-                defaultValue: DataTypes.NOW,
-            },
-            deleted_at: {
-                type: DataTypes.DATE,
-                allowNull: true,
-            },
         }, {
-            sequelize : mainSequelize,
+            sequelize: mainSequelize,
             modelName: 'user',
             tableName: 'users',
             timestamps: true,
+            createdAt: 'created_at',
+            updatedAt: 'updated_at',
+            deletedAt: 'deleted_at',
             paranoid: true,
-            defaultScope:{
-                attributes: {exclude:['password']}
+            defaultScope: {
+                attributes: {exclude: ['password']}
             }
         });
         isInitialized = true;
-        UserModel.hasOne(AccountModel, { foreignKey: 'user_id', as: 'Account' });
+
 
     }
     return UserModel;

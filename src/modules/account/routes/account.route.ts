@@ -3,11 +3,10 @@ import {AccountService} from "../infrastructure/services/account.service";
 import {AccountRepository} from "../infrastructure/respositories/account.repository";
 import {AccountController} from "../controllers/account.controller";
 
-const accountRepository = new AccountRepository();
-const accountService = new AccountService(accountRepository);
+const accountService = new AccountService(new AccountRepository());
 const accountController = new AccountController(accountService)
 const router = express.Router();
 
-router.post('/register', async (req: Request, res:Response) => accountController.registerAccount(req,res))
+router.post('/register', async (req: Request, res:Response) => accountController.registerAccountAndCreateUser(req,res))
 
 export default router;

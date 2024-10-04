@@ -12,7 +12,7 @@ export class UserRepository extends BaseRepository<UserEntity, UserEntityToPersi
     }
 
     override async create(fields: UserEntityToPersist): Promise<UserEntity> {
-        const existEmail = await super.findOne({email:fields.email})
+        const existEmail = await super.findOne({ where: { email: fields.email } })
         if(existEmail){
             throw new GError('Email already exist',409)
         }

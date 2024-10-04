@@ -18,8 +18,8 @@ export class BaseService<T extends BaseEntity, U extends BaseEntityToPersist<T>>
         };
         return this.repository.create(fieldsToCreate as unknown as U)
     }
-    findOne(field: U): Promise<T | null> {
-        return this.repository.findOne(field)
+    findOne(query: {where: Partial<U>} ): Promise<T | null> {
+        return this.repository.findOne(query)
     }
     getById(id: string): Promise<T | null> {
         return this.repository.getById(id)

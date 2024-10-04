@@ -16,5 +16,5 @@ export class BaseEntity {
     }
 }
 
-export type BaseEntityToPersist<T extends BaseEntity> = Omit<T, 'id' | 'created_at' | 'updated_at' | 'deleted_at'>;
-export type BaseEntityFields<T extends BaseEntity> = T;
+export type BaseEntityToPersist<T extends BaseEntity> = Omit<T,'id'| 'created_at' | 'updated_at' | 'deleted_at'> & {id?:string};
+export type BaseEntityFields<T extends BaseEntity> = T

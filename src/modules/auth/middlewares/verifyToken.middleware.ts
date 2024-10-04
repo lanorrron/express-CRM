@@ -1,8 +1,8 @@
 import {NextFunction, Request, Response} from "express";
 import {verify} from 'jsonwebtoken'
-import {sendError} from "../../../shared/utils/responseHandlers";
+import {sendError, sendSuccess} from "../../../shared/utils/responseHandlers";
 
-export const VerifyToken = (req: Request, res: Response, next: NextFunction) => {
+export const verifyToken = (req: Request, res: Response, next: NextFunction) => {
     const authHeader = req.headers['authorization'];
 
     if (!authHeader) {
@@ -21,3 +21,7 @@ export const VerifyToken = (req: Request, res: Response, next: NextFunction) => 
         return res.status(401).json(sendError('Invalid token', 401))
     }
 };
+
+ export function verifyMe(req: Request, res: Response){
+    return res.status(200).json(sendSuccess('user verified', {user:( req as any).user}))
+}

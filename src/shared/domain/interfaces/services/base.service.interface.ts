@@ -6,7 +6,7 @@ export interface IBaseService<T extends BaseEntity, U extends BaseEntityToPersis
 
     create(fields: U): Promise<T>;
 
-    findOne(query: { where: Partial<U> }): Promise<T | null>
+    findOne(query: Partial<U>): Promise<T | null>
 
     getById(id: string): Promise<T | null>;
 

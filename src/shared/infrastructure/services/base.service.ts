@@ -8,7 +8,8 @@ export class BaseService<T extends BaseEntity, U extends BaseEntityToPersist<T>>
     constructor(repository: IBaseRepository<T, U>) {
         this.repository = repository
     }
-    create(fields: Omit<U, 'created_at' | 'updated_at' | 'deleted_at'> ): Promise<T> {
+
+    create(fields: Omit<U, 'created_at' | 'updated_at' | 'deleted_at'>): Promise<T> {
         const currentTimestamp = new Date();
         const fieldsToCreate = {
             ...fields,
@@ -18,9 +19,11 @@ export class BaseService<T extends BaseEntity, U extends BaseEntityToPersist<T>>
         };
         return this.repository.create(fieldsToCreate as unknown as U)
     }
-    findOne(query: {where: Partial<U>} ): Promise<T | null> {
+
+    findOne(query: Partial<U>): Promise<T | null> {
         return this.repository.findOne(query)
     }
+
     getById(id: string): Promise<T | null> {
         return this.repository.getById(id)
     }

@@ -54,9 +54,6 @@ export const getUserModel = () => {
             updatedAt: 'updated_at',
             deletedAt: 'deleted_at',
             paranoid: true,
-            defaultScope: {
-                attributes: {exclude: ['password']}
-            }
         });
         isInitialized = true;
 

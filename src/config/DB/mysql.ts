@@ -9,7 +9,7 @@ const mainSequelize = new Sequelize(config.dbName!, config.dbUser!, config.dbPas
 
 const syncDatabase = async () => {
     try {
-        await mainSequelize.sync( {alter: true}); // `force: true` recrea las tablas en cada inicio
+        await mainSequelize.sync( ); // `force: true` recrea las tablas en cada inicio
         console.log('Database synchronized');
     } catch (error) {
         console.error('Unable to synchronize the database:', error);

@@ -1,6 +1,6 @@
 import {NextFunction, Request, Response} from "express";
 import {verify} from 'jsonwebtoken'
-import {sendError, sendSuccess} from "../../../shared/utils/responseHandlers";
+import {sendError, sendSuccess} from "../utils/responseHandlers";
 
 export const verifyToken = (req: Request, res: Response, next: NextFunction) => {
     const authHeader = req.headers['authorization'];

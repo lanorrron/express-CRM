@@ -5,7 +5,6 @@ import {GError} from "../../../shared/domain/entities/gError.entity";
 import {LoginRequest} from "../domain/types/auth.types";
 
 
-
 export class AuthController {
 
     constructor(protected authService: AuthService) {

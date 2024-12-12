@@ -4,6 +4,7 @@ import {IUserRepository} from "../../domain/interfaces/repositories/user.reposit
 import {getUserModel} from "../models/user.model";
 import {GError} from "../../../../shared/domain/entities/gError.entity";
 import {hash} from "bcrypt";
+import {CreateOptions} from "sequelize";
 
 export class UserRepository extends BaseRepository<UserEntity, UserEntityToPersist> implements IUserRepository {
 
@@ -11,7 +12,8 @@ export class UserRepository extends BaseRepository<UserEntity, UserEntityToPersi
         super(getUserModel(), UserEntity.fromDataBase);
     }
 
-    override async create(fields: UserEntityToPersist): Promise<UserEntity> {
+    override async create(fields: UserEntityToPersist, options?:Object): Promise<UserEntity> {
+        const optionsObject = (options || {}) as CreateOptions
         const {email} = fields
         const existEmail = await super.findOne({email })
         if(existEmail){
@@ -21,6 +23,6 @@ export class UserRepository extends BaseRepository<UserEntity, UserEntityToPersi
             fields.password = await hash(fields.password, 10)
         }
 
-        return await super.create(fields);
+        return await super.create(fields, optionsObject);
     }
 }

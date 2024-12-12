@@ -1,14 +1,13 @@
 // src/modules/account/infrastructure/models/account.model.ts
-import { Model, DataTypes } from 'sequelize';
-import {AccountEntity, AccountEntityToPersist} from '../../domain/entities/account.entity';
+import {Model, DataTypes, Sequelize} from 'sequelize';
 import { mainSequelize } from '../../../../config/DB/mysql';
 import {getUserModel, UserModel} from "../../../users/infrastructure/models/user.model";
+import {AccountEntityToPersist} from "../../domain/entities/account.entity";
 
 export class AccountModel extends Model<AccountEntityToPersist > implements AccountEntityToPersist {
      declare id: string;
      name_organization!: string;
-     phone_number!: string;
-     user_id!: string;
+     owner_user_id!: string;
 }
 
 let isInitialized = false;
@@ -26,12 +25,7 @@ export const getAccountModel = () => {
                 allowNull: false,
                 unique: true
             },
-            phone_number: {
-                type: DataTypes.STRING,
-                allowNull: false,
-                unique: true,
-            },
-            user_id: {
+            owner_user_id: {
                 type: DataTypes.UUID,
                 allowNull: false,
                 references: {
@@ -75,12 +69,12 @@ export const defineRelations = () => {
 
     // Definir asociaciones solo si los modelos están inicializados
     UserModel.hasOne(AccountModel, {
-        foreignKey: 'user_id',
+        foreignKey: 'owner_user_id',
         as: 'account',
     });
 
     AccountModel.belongsTo(UserModel, {
-        foreignKey: 'user_id',
+        foreignKey: 'owner_user_id',
         as: 'user',
     });
 };

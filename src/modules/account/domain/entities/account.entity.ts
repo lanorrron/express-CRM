@@ -2,16 +2,13 @@ import {BaseEntity, BaseEntityFields, BaseEntityToPersist} from "../../../../sha
 
 export class AccountEntity extends BaseEntity {
     name_organization: string
-    phone_number: string;
-    user_id: string
+    owner_user_id: string
 
 
-    constructor(id: string, created_at: Date | string, updated_at: Date | string, deleted_at: Date | string | null , name_organization: string, phone_number: string, user_id: string) {
+    constructor(id: string, created_at: Date | string, updated_at: Date | string, deleted_at: Date | string | null, name_organization: string, owner_user_id: string) {
         super(id, created_at, updated_at, deleted_at);
         this.name_organization = name_organization;
-        this.phone_number = phone_number;
-        this.user_id = user_id
-
+        this.owner_user_id = owner_user_id
     }
 
     static fromDataBase(field: AccountEntityFields): AccountEntity {
@@ -21,8 +18,7 @@ export class AccountEntity extends BaseEntity {
             field.updated_at,
             field.deleted_at,
             field.name_organization,
-            field.phone_number,
-            field.user_id
+            field.owner_user_id
         );
     }
 }

@@ -6,10 +6,11 @@ import {AccountModel} from "../../../account/infrastructure/models/account.model
 export class UserModel extends Model<UserEntityToPersist> implements UserEntityToPersist {
     email!: string;
     first_name!: string;
+    full_name!: string;
     id!: string;
     last_name!: string;
     password!: string;
-    role!: string;
+    phone_number!: string;
 
 
 }
@@ -29,7 +30,7 @@ export const getUserModel = () => {
                 allowNull: false,
                 unique: true,
             },
-            role: {
+            phone_number: {
                 type: DataTypes.STRING,
                 allowNull: false,
             },
@@ -45,6 +46,10 @@ export const getUserModel = () => {
                 type: DataTypes.STRING,
                 allowNull: false,
             },
+            full_name:{
+                type: DataTypes.STRING,
+                allowNull: false
+            }
         }, {
             sequelize: mainSequelize,
             modelName: 'user',

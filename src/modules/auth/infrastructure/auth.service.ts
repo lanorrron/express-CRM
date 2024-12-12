@@ -1,8 +1,6 @@
 import {IAuthService} from "../domain/interfaces/auth.service.interface";
-import {UserModel} from "../../users/infrastructure/models/user.model";
 import {UserService} from "../../users/infrastructure/services/user.service";
 import {UserRepository} from "../../users/infrastructure/respositories/user.repository";
-import {UserEntityToPersist} from "../../users/domain/entities/user.entity";
 import {compare} from 'bcrypt'
 import {GError} from "../../../shared/domain/entities/gError.entity";
 import {sign} from "jsonwebtoken";
@@ -20,9 +18,4 @@ export class AuthService implements IAuthService {
 
         return Promise.resolve({token, user:userWithoutPassword});
     }
-
-    logout(userId: string): Promise<void> {
-        return Promise.resolve(undefined);
-    }
-
 }

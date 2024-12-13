@@ -9,7 +9,7 @@ export class WorkspaceModel extends Model<WorkspaceEntityToPersist> implements W
     account_id!: string;
 }
 let isInitialized = false
-const getWorkspaceModel = () =>{
+export const getWorkspaceModel = () =>{
     if(!isInitialized){
         WorkspaceModel.init({
             id:{

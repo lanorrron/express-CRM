@@ -31,13 +31,14 @@ export class BaseRepository<T extends BaseEntity, U extends BaseEntityToPersist<
         return result ? this.parser(result.toJSON()) : null;
     }
 
-    async updateById(id: string, fields: Partial<NonUpdatableFields<T>>): Promise<T | null> {
-        const record = await this.model.findOne({where: {id}});
+    async updateById(id: string, fields: Partial<NonUpdatableFields<T>>, options?: Object): Promise<T | null> {
+        const optionsObject = (options || {}) as CreateOptions
+        const record = await this.model.findOne({where: {id:id}, transaction:optionsObject.transaction});
         if (!record) {
             return null;
         }
 
-        await record.update(fields);
+        await record.update(fields, optionsObject);
 
         return this.parser(record.toJSON())
     }

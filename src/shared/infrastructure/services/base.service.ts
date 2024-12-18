@@ -31,8 +31,8 @@ export class BaseService<T extends BaseEntity, U extends BaseEntityToPersist<T>>
         return this.repository.getById(id)
     }
 
-    async updateById(id: string, fields: Partial<NonUpdatableFields<T>>): Promise<T | null> {
-        const entityUpdated = await this.repository.updateById(id, fields)
+    async updateById(id: string, fields: Partial<NonUpdatableFields<T>>, options?: Object): Promise<T | null> {
+        const entityUpdated = await this.repository.updateById(id, fields, options)
         if(!entityUpdated){
             throw new GError('Account not found', 404)
         }

@@ -10,7 +10,7 @@ export interface IBaseService<T extends BaseEntity, U extends BaseEntityToPersis
 
     getById(id: string): Promise<T | null>;
 
-    updateById(id: string, fields: Partial<NonUpdatableFields<T>>): Promise<T | null>;
+    updateById(id: string, fields: Partial<NonUpdatableFields<T>>, options?: Object): Promise<T | null>;
 
     deleteById(id: string): Promise<T | null | number >;
 

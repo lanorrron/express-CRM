@@ -1,4 +1,4 @@
-import express, {Request, Response} from 'express';
+import express from 'express';
 import {AccountService} from "../infrastructure/services/account.service";
 import {AccountRepository} from "../infrastructure/respositories/account.repository";
 import {AccountController} from "../controllers/account.controller";

@@ -1,5 +1,4 @@
 import {AccountService} from "../infrastructure/services/account.service";
-import {AccountEntity} from "../domain/entities/account.entity";
 import {sendError, sendSuccess} from "../../../shared/utils/responseHandlers";
 import {GError} from "../../../shared/domain/entities/gError.entity";
 import {Response, Request} from "express";
@@ -25,30 +24,33 @@ export class AccountController {
         const transaction = await mainSequelize.transaction()
         try {
             const {account, user} = req.body;
-            const dtoUser = new CreatedUserDto(user)
-            const {isValid: isValidDtoUser, errors: errorsDtoUser} = dtoUser.validate()
-            if (!isValidDtoUser) {
 
-                throw new GError('validation erros', 400, errorsDtoUser)
-            }
-            const fullName = dtoUser.first_name + " " + dtoUser.last_name
-            const paramsCreateUser = {...dtoUser, full_name: fullName}
-
-            const createdUser = await this.userService.create(paramsCreateUser, {transaction});
             const dtoAccount = new CreateAccountDto(account)
             const {isValid: isValidAccountDto, errors: errorsAccountDto} = dtoAccount.validate()
 
+           const accountCreated = await this.accountService.create(dtoAccount, {transaction});
             if (!isValidAccountDto) {
                 throw new GError('validation erros', 400, errorsAccountDto)
             }
 
-            const accountWithUserId: AccountEntity = {...account, owner_user_id: createdUser.id};
-            await this.accountService.create(accountWithUserId, {transaction});
+            const dtoUser = new CreatedUserDto(user)
+            const {isValid: isValidDtoUser, errors: errorsDtoUser} = dtoUser.validate()
+            if (!isValidDtoUser) {
+                throw new GError('validation errors', 400, errorsDtoUser)
+            }
+            const fullName = dtoUser.first_name + " " + dtoUser.last_name
+            const paramsCreateUser = {...dtoUser, full_name: fullName, account_id:accountCreated.id }
+
+            const createdUser = await this.userService.create(paramsCreateUser, {transaction});
+             accountCreated.owner_user_id = createdUser.id
+           await this.accountService.updateById(accountCreated.id,{owner_user_id:createdUser.id}, {transaction})
+
             const token = sign({createdUser}, JWT_SECRET!, {expiresIn: '1h'});
 
             await transaction.commit()
             return res.status(200).json(sendSuccess('Account created', {token}));
         } catch (error: any) {
+            console.log(error)
             await transaction.rollback();
             if (error instanceof GError) {
                 return res.status(error.statusCode).json(sendError(error.message, error.statusCode, error.errors ?? []));

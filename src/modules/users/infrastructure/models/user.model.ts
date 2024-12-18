@@ -1,7 +1,6 @@
 import {DataTypes, Model, UUID, UUIDV4} from "sequelize";
-import {UserEntity, UserEntityToPersist} from "../../domain/entities/user.entity";
+import {UserEntityToPersist} from "../../domain/entities/user.entity";
 import {mainSequelize} from "../../../../config/DB/mysql";
-import {AccountModel} from "../../../account/infrastructure/models/account.model";
 
 export class UserModel extends Model<UserEntityToPersist> implements UserEntityToPersist {
     email!: string;
@@ -11,8 +10,7 @@ export class UserModel extends Model<UserEntityToPersist> implements UserEntityT
     last_name!: string;
     password!: string;
     phone_number!: string;
-
-
+    account_id!: string;
 }
 
 let isInitialized = false;
@@ -49,6 +47,11 @@ export const getUserModel = () => {
             full_name:{
                 type: DataTypes.STRING,
                 allowNull: false
+            },
+            account_id:{
+                type: DataTypes.UUID,
+                allowNull: false,
+
             }
         }, {
             sequelize: mainSequelize,
@@ -61,8 +64,6 @@ export const getUserModel = () => {
             paranoid: true,
         });
         isInitialized = true;
-
-
     }
     return UserModel;
 };

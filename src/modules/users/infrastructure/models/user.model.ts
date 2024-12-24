@@ -2,21 +2,16 @@ import {DataTypes, Model, UUID, UUIDV4} from "sequelize";
 import {UserEntityToPersist} from "../../domain/entities/user.entity";
 import {mainSequelize} from "../../../../config/DB/mysql";
 
-export class UserModel extends Model<UserEntityToPersist> implements UserEntityToPersist {
+export class UserModel extends Model<UserEntityToPersist> {
+    declare id:string;
     email!: string;
     first_name!: string;
     full_name!: string;
-    id!: string;
     last_name!: string;
     password!: string;
     phone_number!: string;
-    account_id!: string;
 }
 
-let isInitialized = false;
-
-export const getUserModel = () => {
-    if (!isInitialized) {
         UserModel.init({
             id: {
                 type: UUID,
@@ -48,11 +43,6 @@ export const getUserModel = () => {
                 type: DataTypes.STRING,
                 allowNull: false
             },
-            account_id:{
-                type: DataTypes.UUID,
-                allowNull: false,
-
-            }
         }, {
             sequelize: mainSequelize,
             modelName: 'user',
@@ -63,7 +53,3 @@ export const getUserModel = () => {
             deletedAt: 'deleted_at',
             paranoid: true,
         });
-        isInitialized = true;
-    }
-    return UserModel;
-};

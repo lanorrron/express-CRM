@@ -8,9 +8,6 @@ export class RoleModel extends Model<RoleEntityToPersist> implements RoleEntityT
 
 }
 
-let isInitialized = false;
-export const getRoleModel = () => {
-    if (!isInitialized) {
         RoleModel.init({
             id:{
                 type: DataTypes.UUID,
@@ -31,6 +28,3 @@ export const getRoleModel = () => {
             createdAt: 'created_at',
             updatedAt: 'updated_at',
             deletedAt: 'deleted_at'})
-    }
-    return RoleModel
-}

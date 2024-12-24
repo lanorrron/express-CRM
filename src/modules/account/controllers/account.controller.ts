@@ -6,7 +6,6 @@ import {Response, Request} from "express";
 import {sign} from 'jsonwebtoken'
 import {UserService} from "../../users/infrastructure/services/user.service";
 import {UserRepository} from "../../users/infrastructure/respositories/user.repository";
-import {mainSequelize} from "../../../config/DB/mysql";
 import {UpdateAccountDto} from "../dtos/update.dto";
 import {CreatedUserDto} from "../../users/dtos/createdUser.dto";
 import {CreateAccountDto} from "../dtos/createAccount.dto";
@@ -21,14 +20,12 @@ export class AccountController {
     }
 
     async registerAccountAndCreateUser(req: Request, res: Response): Promise<Response> {
-        const transaction = await mainSequelize.transaction()
         try {
             const {account, user} = req.body;
 
             const dtoAccount = new CreateAccountDto(account)
             const {isValid: isValidAccountDto, errors: errorsAccountDto} = dtoAccount.validate()
 
-           const accountCreated = await this.accountService.create(dtoAccount, {transaction});
             if (!isValidAccountDto) {
                 throw new GError('validation erros', 400, errorsAccountDto)
             }
@@ -39,19 +36,14 @@ export class AccountController {
                 throw new GError('validation errors', 400, errorsDtoUser)
             }
             const fullName = dtoUser.first_name + " " + dtoUser.last_name
-            const paramsCreateUser = {...dtoUser, full_name: fullName, account_id:accountCreated.id }
+            const paramsCreateUser = {...dtoUser, full_name: fullName }
+            const accountAndUserCreated = await this.accountService.createAccountAndUser(paramsCreateUser,dtoAccount);
 
-            const createdUser = await this.userService.create(paramsCreateUser, {transaction});
-             accountCreated.owner_user_id = createdUser.id
-           await this.accountService.updateById(accountCreated.id,{owner_user_id:createdUser.id}, {transaction})
+            const token = sign({accountAndUserCreated}, JWT_SECRET!, {expiresIn: '1h'});
 
-            const token = sign({createdUser}, JWT_SECRET!, {expiresIn: '1h'});
-
-            await transaction.commit()
             return res.status(200).json(sendSuccess('Account created', {token}));
-        } catch (error: any) {
+        } catch (error) {
             console.log(error)
-            await transaction.rollback();
             if (error instanceof GError) {
                 return res.status(error.statusCode).json(sendError(error.message, error.statusCode, error.errors ?? []));
             } else {
